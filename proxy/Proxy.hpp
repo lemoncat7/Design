@@ -4,7 +4,7 @@
  * @Author: 莫邪
  * @Date: 2023-10-13 09:49:13
  * @LastEditors: 莫邪
- * @LastEditTime: 2023-10-13 10:34:10
+ * @LastEditTime: 2023-10-13 11:03:28
  */
 #include <iostream>
 
@@ -16,7 +16,7 @@ class Subject {
 // 接口虚类2
 class Subject2 {
  public:
-  virtual void method() = 0;
+  virtual void method2() = 0;
 };
 // 业务实现类
 class RealSubject : public Subject {
@@ -26,7 +26,7 @@ class RealSubject : public Subject {
 // 业务实现类2
 class RealSubject2 : public Subject2{
  public:
-  void method() { std::cout << "real2 method" << std::endl; }
+  void method2() { std::cout << "real2 method" << std::endl; }
 };
 // Log类
 class Log {
@@ -67,10 +67,16 @@ class DynamicProxy : public T {
 public:
   DynamicProxy(std::function<void()> func) : func(func), log(new Log) {}
   ~DynamicProxy() { delete log; }
-  void method() {
+  void extend() {
     std::cout << log->getTime() << ": " << "dynamic proxy start" << std::endl;
     func();
     std::cout << log->getTime() << ": " << "dynamic proxy end" << std::endl;
+  }
+  void method() {
+    extend();
+  }
+  void method2() {
+    extend();
   }
 private:
   std::function<void()> func;
