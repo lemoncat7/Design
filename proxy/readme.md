@@ -1,11 +1,3 @@
-<!--
- * @Description: 
- * @version: 
- * @Author: 莫邪
- * @Date: 2023-10-13 10:41:27
- * @LastEditors: 莫邪
- * @LastEditTime: 2023-10-13 10:41:28
--->
 # 代理模式
 
 简单回顾下创建型模式
@@ -15,7 +7,7 @@
 3. 建造者模式是用来创建复杂对象, 可以通过设置不同的可选参数, “定制化”地创建不同的对象
 4. 原型模式针对创建成本比较大的对象, 利用对已有对象进行复制的方式进行创建, 以达到节省创建时间的目的
 
-接下来就是机构型模型
+接下来就是结构型模型
 
 结构型模式包括：代理模式、桥接模式、装饰器模式、适配器模式、门面模式、组合模式、享元模式
 
@@ -26,17 +18,17 @@
 下述有个业务接口.
 
 ```cpp
-//接口虚类
+// 接口虚类
 class Subject {
-public:
-    virtual void method() = 0;
+ public:
+  virtual void method() = 0;
+  virtual void print() = 0;
 };
 //业务实现类
 class RealSubject : public Subject {
-public:
-    void method() {
-        std::cout << "real method" << std::endl;
-    }
+ public:
+  void method() { print(); }
+  void print() { std::cout << "real method" << std::endl; }
 };
 ```
 
@@ -67,7 +59,7 @@ class Log {
 ```cpp
 //代理类
 class StaticProxy : public Subject {
-public:
+ public:
   StaticProxy() {
     subject = new RealSubject();
     log = new Log();
@@ -77,11 +69,15 @@ public:
     delete log;
   }
   void method() {
-    std::cout << log->getTime() << ": " << "static proxy start" << std::endl;
+    std::cout << log->getTime() << ": "
+              << "static proxy start" << std::endl;
     subject->method();
-    std::cout << log->getTime() << ": " << "static proxy end" << std::endl;
+    std::cout << log->getTime() << ": "
+              << "static proxy end" << std::endl;
   }
-private:
+  void print() {}
+
+ private:
   RealSubject* subject;
   Log* log;
 };
@@ -128,12 +124,14 @@ real method
 // 接口虚类2
 class Subject2 {
  public:
-  virtual void method() = 0;
+  virtual void method2() = 0;
+  virtual void print2() = 0;
 };
 // 业务实现类2
-class RealSubject2 : public Subject2{
+class RealSubject2 : public Subject2 {
  public:
-  void method() { std::cout << "real2 method" << std::endl; }
+  void method2() { print2(); }
+  void print2() { std::cout << "real2 method" << std::endl; } 
 };
 ```
 
@@ -142,15 +140,20 @@ class RealSubject2 : public Subject2{
 ```cpp
 template <class T>
 class DynamicProxy : public T {
-public:
+ public:
   DynamicProxy(std::function<void()> func) : func(func), log(new Log) {}
   ~DynamicProxy() { delete log; }
-  void method() {
-    std::cout << log->getTime() << ": " << "dynamic proxy start" << std::endl;
+  void extend() {
+    std::cout << log->getTime() << ": "
+              << "dynamic proxy start" << std::endl;
     func();
-    std::cout << log->getTime() << ": " << "dynamic proxy end" << std::endl;
+    std::cout << log->getTime() << ": "
+              << "dynamic proxy end" << std::endl;
   }
-private:
+  void method() { extend(); }
+  void method2() { extend(); }
+
+ private:
   std::function<void()> func;
   Log* log;
 };
@@ -178,6 +181,11 @@ real method
 real method
 2023-10-13 10:34:48: dynamic proxy end
 ```
+
+通过动态代理方式(模版增加通用性) 
+
+1. 可以通过绑定函数的方式动态添加需要增加扩展的业务函数接口
+2. 只需要实现增加扩展的接口, 不需要全部实现基类所以接口
 
 ## 适用
 
