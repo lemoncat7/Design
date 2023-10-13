@@ -163,9 +163,9 @@ class DynamicProxy : public T {
 
 ```cpp
 std::cout << "-----Dynamic Proxy Pattern-----" << std::endl;
-auto sub = std::make_shared<DynamicProxy<Subject>>(std::bind(&RealSubject::method, RealSubject()));
+auto sub = std::make_shared<DynamicProxy<RealSubject>>(std::bind(&RealSubject::method, RealSubject()));
 sub->method();
-auto sub2 = std::make_shared<DynamicProxy<Subject2>>(std::bind(&RealSubject2::method, RealSubject2()));
+auto sub2 = std::make_shared<DynamicProxy<RealSubject2>>(std::bind(&RealSubject2::method, RealSubject2()));
 sub->method();
 ```
 
@@ -178,7 +178,7 @@ sub->method();
 real method
 2023-10-13 10:34:48: dynamic proxy end
 2023-10-13 10:34:48: dynamic proxy start
-real method
+real2 method
 2023-10-13 10:34:48: dynamic proxy end
 ```
 
