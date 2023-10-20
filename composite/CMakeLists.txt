@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Clone)
+project(Composite)
 # 设置变量 
 set(SRC_LIST main.cpp)
 # 获取路径
@@ -8,4 +8,4 @@ get_filename_component(FOLDER_NAME ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 get_filename_component(FOLDER_NAME ${FOLDER_NAME} NAME)
 # 设置输出路径
 set(EXECUTABLE_OUTPUT_PATH ${OUTPUT_DIR}/${FOLDER_NAME}/)
-add_executable(clone ${SRC_LIST})
+add_executable(composite ${SRC_LIST})
