@@ -4,10 +4,8 @@
  * @Author: 莫邪
  * @Date: 2023-10-24 11:16:37
  * @LastEditors: 莫邪
- * @LastEditTime: 2023-10-24 11:16:40
+ * @LastEditTime: 2023-10-24 11:23:30
 -->
-# 观察者模式
-
 从今天起, 开始学习行为型设计模式. 
 
 我们常把23种经典的设计模式分为三类: 创建型、结构型、行为型.
@@ -25,8 +23,19 @@
 其工作原理如下:
 
 1. 主题将所有观察它的对象保存在一个集合中。
-2. 当主题状态发生改变时,会遍历所有观察者,调用它们的更新方法。
-3. 观察者收到通知后会执行相应的更新逻辑。
+
+```
+std::shared_ptr<WeatherConcrete> weather = std::make_shared<WeatherConcrete>();
+  weather->RegisterObserver(std::make_shared<Smartphone>());
+  weather->RegisterObserver(std::make_shared<SmartHouse>());
+  weather->RegisterObserver(std::make_shared<SmartDresser>());
+  weather->RegisterObserver(std::make_shared<TV>());
+  weather->setMeasurements(18, 20, Weather::CLOUDY, {23,24,24,24,23,21});
+  weather->setMeasurements(35, 40, Weather::SUNNY, {35,55,40,35,32,30});
+```
+
+1. 当主题状态发生改变时,会遍历所有观察者,调用它们的更新方法。
+2. 观察者收到通知后会执行相应的更新逻辑。
 
 观察者模式可以实现对象之间的松耦合,当主题状态发生改变时,可以通知多个观察者对象,而无需每个观察者都了解主题的具体实现. 适用于需要维护对象之间一致性的系统.
 
@@ -195,7 +204,7 @@ class SmartDresser : public Observer {
 ```cpp
 std::shared_ptr<WeatherConcrete> weather = std::make_shared<WeatherConcrete>();
 weather->RegisterObserver(std::make_shared<Smartphone>());
-weather->RegisterObserver(std::make_shared<SmartDresser>());
+weather->RegisterObserver(std::make_shared<SmartHouse>());
 weather->RegisterObserver(std::make_shared<SmartDresser>());
 weather->RegisterObserver(std::make_shared<TV>());
 weather->setMeasurements(18, 20, Weather::CLOUDY, {23,24,24,24,23,21});
@@ -205,16 +214,17 @@ weather->setMeasurements(35, 40, Weather::SUNNY, {35,55,40,35,32,30});
 ## 效果
 
 ```cpp
-./bin/design/observer 
+./bin/design/observer
 Smartphone: 当前温度18℃ 
             未来天气预测23℃ 24℃ 24℃ 24℃ 23℃ 21℃ 
-SmartDresser: 当前天气阴天，建议带外套
+SmartHouse: 当前温度18℃ , 提高空调温度 10%
 SmartDresser: 当前天气阴天，建议带外套
 TV: 当前温度18℃ 
     当前湿度20% 
 Smartphone: 当前温度35℃ 
             未来天气预测35℃ 55℃ 40℃ 35℃ 32℃ 30℃ 
-SmartDresser: 当前天气晴朗，建议穿短袖
+SmartHouse: 当前温度35℃ , 降低空调温度 10%
+            当前湿度40% , 关闭加湿器
 SmartDresser: 当前天气晴朗，建议穿短袖
 TV: 当前温度35℃ 
     当前湿度40%
